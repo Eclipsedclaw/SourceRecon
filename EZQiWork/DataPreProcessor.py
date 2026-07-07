@@ -134,5 +134,8 @@ class DataPreProcessor:
         # 再将 ch2 合并进来。
         final_df = pd.merge(final_df, df2, on="EventID", how="outer")
 
+        # 按照 EventID 排序并重置索引，看起来更整洁
+        final_df = final_df.sort_values(by='EventID').reset_index(drop=True)
+
         self.final_df = final_df
         return final_df
