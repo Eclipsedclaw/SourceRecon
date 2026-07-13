@@ -18,3 +18,4 @@ install_manifest.txt
 *.root
 *.heprep
 .venv311/
+*.log
