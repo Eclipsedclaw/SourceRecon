@@ -9,7 +9,7 @@ cmake_install.cmake
 install_manifest.txt
 
 # Ignore all data
-*.txt
+# *.txt
 *.png
 *.jpg
 *.jpeg
