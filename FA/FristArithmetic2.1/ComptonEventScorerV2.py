@@ -25,10 +25,16 @@ class ComptonEventScorerV2:
         full_params=None,
         energy_scale_mev=1.0,
         distance_scale_mm=100.0,
+        energy_feature_mode="full",
     ):
         self.event_list = event_list
         self.energy_scale_mev = energy_scale_mev
         self.distance_scale_mm = distance_scale_mm
+        if energy_feature_mode not in ("full", "normalized"):
+            raise ValueError(
+                "energy_feature_mode 必须是 'full' 或 'normalized'。"
+            )
+        self.energy_feature_mode = energy_feature_mode
 
         self.feature_names = [
             "bias",
@@ -41,6 +47,9 @@ class ComptonEventScorerV2:
             "E_mean_norm",
             "E_max_norm",
             "energy_balance",
+            "energy_fraction_1",
+            "energy_fraction_2",
+            "energy_fraction_3",
 
             "distance_12_norm",
             "distance_23_norm",
@@ -49,10 +58,25 @@ class ComptonEventScorerV2:
             "delta_cos_second_squared",
 
             "ends_in_last_layer",
+            "starts_in_first_layer",
         ]
 
-        self.match_params = match_params or self._default_match_params()
-        self.full_params = full_params or self._default_full_params()
+        self.match_params = self._prepare_params(
+            match_params,
+            self._default_match_params(),
+        )
+        self.full_params = self._prepare_params(
+            full_params,
+            self._default_full_params(),
+        )
+
+    def _prepare_params(self, supplied, defaults):
+        params = defaults.copy()
+        if supplied is not None:
+            for name, value in supplied.items():
+                if name in params:
+                    params[name] = float(value)
+        return params
 
     def _default_match_params(self):
         params = {name: 0.0 for name in self.feature_names}
@@ -131,6 +155,10 @@ class ComptonEventScorerV2:
         E_min = min(energies) if len(energies) else 0.0
 
         energy_balance = E_min / E_max if E_max > 0 else 0.0
+        energy_fractions = [0.0, 0.0, 0.0]
+        if E_total > 0:
+            for index, value in enumerate(energies[:3]):
+                energy_fractions[index] = value / E_total
 
         distance_12 = self._safe(getattr(event, "distance_12", 0.0))
         distance_23 = self._safe(getattr(event, "distance_23", 0.0))
@@ -144,8 +172,19 @@ class ComptonEventScorerV2:
             delta_sq = 0.0
 
         ends_in_last_layer = 0.0
+        starts_in_first_layer = 0.0
         if len(layers) > 0:
-            ends_in_last_layer = 1.0 if layers[-1] == max(layers) else 0.0
+            ends_in_last_layer = 1.0 if layers[-1] == 2 else 0.0
+            starts_in_first_layer = 1.0 if layers[0] == 0 else 0.0
+
+        if self.energy_feature_mode == "normalized":
+            E_total_norm = 0.0
+            E_mean_norm = 0.0
+            E_max_norm = 0.0
+        else:
+            E_total_norm = E_total / self.energy_scale_mev
+            E_mean_norm = E_mean / self.energy_scale_mev
+            E_max_norm = E_max / self.energy_scale_mev
 
         return {
             "bias": 1.0,
@@ -154,10 +193,13 @@ class ComptonEventScorerV2:
             "is_physical": is_physical,
             "layer_order_score": layer_order_score,
 
-            "E_total_norm": E_total / self.energy_scale_mev,
-            "E_mean_norm": E_mean / self.energy_scale_mev,
-            "E_max_norm": E_max / self.energy_scale_mev,
+            "E_total_norm": E_total_norm,
+            "E_mean_norm": E_mean_norm,
+            "E_max_norm": E_max_norm,
             "energy_balance": energy_balance,
+            "energy_fraction_1": energy_fractions[0],
+            "energy_fraction_2": energy_fractions[1],
+            "energy_fraction_3": energy_fractions[2],
 
             "distance_12_norm": distance_12 / self.distance_scale_mm,
             "distance_23_norm": distance_23 / self.distance_scale_mm,
@@ -166,6 +208,7 @@ class ComptonEventScorerV2:
             "delta_cos_second_squared": delta_sq,
 
             "ends_in_last_layer": ends_in_last_layer,
+            "starts_in_first_layer": starts_in_first_layer,
         }
 
     def _logit(self, features, params):
@@ -186,9 +229,11 @@ class ComptonEventScorerV2:
         event.match_prob = match_prob
         event.full_deposition_prob = full_prob
         event.imaging_weight = match_prob * full_prob
+        event.matching_score = match_prob
 
-        # 兼容 EventMatcher
-        event.score = event.imaging_weight
+        # ``score`` remains a compatibility alias for event association.
+        # Imaging reads ``imaging_weight`` explicitly.
+        event.score = event.matching_score
 
         event.score_features = features
         event.match_logit = match_logit
