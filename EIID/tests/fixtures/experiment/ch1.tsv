@@ -1,0 +1,4 @@
+EventID	PixelID	Energy_MeV	X_mm	Y_mm	Z_mm	Time_ns
+1	10	0.200	0.0	0.0	-0.399	11.0
+3	11	0.150	1.0	0.0	-0.399	31.0
+

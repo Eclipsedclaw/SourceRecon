@@ -1,0 +1,108 @@
+{
+  "input": {
+    "type": "geant4_batch",
+    "root_directory": "/data/data/simulation/compton_camera_pixel/jcding",
+    "file_pattern": "b1output_gamma_*MeV_z*m_*.root",
+    "source_offset_angle_deg": 15.0,
+    "center_direction_detector": [0.0, 0.0, -1.0],
+    "horizontal_axis_detector": [-1.0, 0.0, 0.0],
+    "vertical_axis_detector": [0.0, -1.0, 0.0],
+    "generated_event_count_per_file": 10000000,
+    "tree_name": "Tree1",
+    "order_mode": "layer",
+    "spectroscopy_channel": "ch0",
+    "minimum_hit_energy_mev": 0.0,
+    "streaming": true,
+    "uproot_step_size": "100 MB",
+    "maximum_imaging_events": 2000,
+    "maximum_spectroscopy_events": 100000,
+    "sampling_seed": 20260730,
+    "branches": {
+      "event_id": "eventID",
+      "chamber_id": "chamberID",
+      "pixel_id": "pixelID",
+      "energy_mev": "eDep_MeV",
+      "x_mm": "x_post",
+      "y_mm": "y_post",
+      "z_mm": "z_post",
+      "step_id": "stepID",
+      "time_ns": "time_ns"
+    },
+    "chamber_to_layer": {
+      "0": 0,
+      "1": 1,
+      "2": 2
+    },
+    "layer_to_channel": {
+      "0": "ch2",
+      "1": "ch1",
+      "2": "ch0"
+    }
+  },
+  "spectrum": {
+    "mode": "ch0_observed",
+    "minimum_energy_mev": 0.10,
+    "maximum_energy_mev": 2.00,
+    "energy_step_mev": 0.01,
+    "kde_bandwidth_mev": 0.03,
+    "probability_floor": 1e-12
+  },
+  "response": {
+    "energy_resolution": {
+      "fractional_sigma": 0.04,
+      "noise_sigma_mev": 0.005
+    },
+    "full_absorption_probability_by_terminal_channel": {
+      "ch0": 0.25,
+      "ch1": 0.10,
+      "ch2": 0.05
+    },
+    "default_full_absorption_probability": 0.10,
+    "escape_energy_scale_mev": 0.25,
+    "three_hit_geometry_fractional_sigma": 0.10,
+    "arm_sigma_deg_by_hit_count": {
+      "2": 5.0,
+      "3": 4.0,
+      "default": 5.0
+    },
+    "minimum_hypothesis_weight": 1e-15
+  },
+  "attitude": {
+    "mode": "identity"
+  },
+  "reconstruction": {
+    "healpix_nside": 16,
+    "healpix_nested": false,
+    "sweeps": 800,
+    "burn_in_sweeps": 200,
+    "thinning_sweeps": 5,
+    "random_seed": 20260730
+  },
+  "analysis": {
+    "source_zoom_deg": 45.0,
+    "truth_full_tolerance_mev": 0.03,
+    "full_probability_threshold": 0.5,
+    "figure_dpi": 170,
+    "flat_map_grid_size": 700,
+    "map_smoothing_fwhm_deg": 5.0
+  },
+  "batch": {
+    "continue_on_error": true,
+    "skip_completed_datasets": true,
+    "parallel_workers": 5,
+    "memory_guard": {
+      "enabled": true,
+      "minimum_available_gib": 5.0,
+      "estimated_worker_peak_gib": 4.0,
+      "poll_interval_seconds": 2.0,
+      "telemetry_interval_seconds": 10.0,
+      "waiting_log_interval_seconds": 30.0,
+      "maximum_abrupt_retries": 2,
+      "minimum_worker_limit": 1
+    },
+    "maximum_files": null
+  },
+  "output": {
+    "directory": "../output/jcding_batch_SOE1_2"
+  }
+}

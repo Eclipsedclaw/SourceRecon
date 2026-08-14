@@ -1,0 +1,34 @@
+{
+  "type": "geant4_formal_root",
+  "dataset_id": "REPLACE_FORMAL_GEANT4_DATASET",
+  "root_path": "../../data/input/REPLACE_FORMAL_GEANT4.root",
+  "trees": {"primary": "PrimaryTruth", "deposit": "DetectorDeposit"},
+  "branches": {
+    "primary": {
+      "event_id": "eventID",
+      "energy_mev": "initial_energy_MeV",
+      "propagation_x": "momentum_direction_x",
+      "propagation_y": "momentum_direction_y",
+      "propagation_z": "momentum_direction_z",
+      "source_x": "source_direction_x",
+      "source_y": "source_direction_y",
+      "source_z": "source_direction_z",
+      "event_weight": "event_weight",
+      "is_full_absorption": "is_full_absorption_truth",
+      "is_backscatter": "is_backscatter_truth",
+      "has_pair_production": "has_pair_production"
+    },
+    "deposit": {
+      "event_id": "eventID",
+      "chamber_id": "chamberID",
+      "pixel_id": "pixelID",
+      "energy_mev": "total_edep_MeV",
+      "x_mm": "energy_weighted_x_mm",
+      "y_mm": "energy_weighted_y_mm",
+      "z_mm": "energy_weighted_z_mm",
+      "time_ns": "earliest_time_ns",
+      "step_count": "step_count"
+    }
+  },
+  "digitizer": {"mode": "truth"}
+}

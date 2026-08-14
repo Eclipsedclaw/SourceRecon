@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/eiid.schema.json",
+  "title": "EIID configuration schema",
+  "type": "object",
+  "required": ["schema_version", "profile_purpose", "paths", "coordinates", "channel_mapping", "energy_grid", "sky_grid", "trigger", "runtime", "batch"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "profile_purpose": {"type": "string", "minLength": 1},
+    "paths": {
+      "type": "object",
+      "required": ["project_root", "input_root", "response_root", "output_root", "log_root"],
+      "properties": {
+        "project_root": {"type": "string", "minLength": 1},
+        "input_root": {"type": "string", "minLength": 1},
+        "response_root": {"type": "string", "minLength": 1},
+        "output_root": {"type": "string", "minLength": 1},
+        "log_root": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "coordinates": {
+      "type": "object",
+      "required": ["detector_stack_direction", "camera_boresight_source_direction"],
+      "properties": {
+        "detector_stack_direction": {"$ref": "#/$defs/vector3"},
+        "camera_boresight_source_direction": {"$ref": "#/$defs/vector3"}
+      },
+      "additionalProperties": false
+    },
+    "channel_mapping": {
+      "type": "object",
+      "required": ["chamber_to_channel", "channel_to_layer"],
+      "properties": {
+        "chamber_to_channel": {"type": "object"},
+        "channel_to_layer": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "energy_grid": {
+      "type": "object",
+      "required": ["minimum_mev", "maximum_mev"],
+      "properties": {
+        "minimum_mev": {"const": 0.1},
+        "maximum_mev": {"const": 3.0},
+        "bin_width_mev": {"type": "number", "exclusiveMinimum": 0},
+        "edges_mev": {"type": "array", "minItems": 2, "items": {"type": "number"}}
+      },
+      "oneOf": [
+        {"required": ["bin_width_mev"], "not": {"required": ["edges_mev"]}},
+        {"required": ["edges_mev"], "not": {"required": ["bin_width_mev"]}}
+      ],
+      "additionalProperties": false
+    },
+    "sky_grid": {
+      "type": "object",
+      "required": ["type", "nside", "nested"],
+      "properties": {
+        "type": {"const": "healpix"},
+        "nside": {"type": "integer", "minimum": 1},
+        "nested": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["required_channels", "minimum_hit_energy_mev"],
+      "properties": {
+        "required_channels": {"const": ["ch1", "ch2"]},
+        "minimum_hit_energy_mev": {"type": "object"},
+        "coincidence_window_ns": {"type": ["number", "null"], "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["numerical_threads_per_worker"],
+      "properties": {
+        "numerical_threads_per_worker": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "batch": {
+      "type": "object",
+      "required": ["maximum_workers", "memory_guard"],
+      "properties": {
+        "maximum_workers": {"type": "integer", "minimum": 1},
+        "memory_guard": {
+          "type": "object",
+          "required": ["enabled", "minimum_available_gib", "estimated_worker_peak_gib"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "minimum_available_gib": {"type": "number", "exclusiveMinimum": 0},
+            "estimated_worker_peak_gib": {"type": "number", "exclusiveMinimum": 0},
+            "poll_interval_seconds": {"type": "number", "exclusiveMinimum": 0},
+            "maximum_retries": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "input": {"type": "object"},
+    "response": {
+      "type": "object",
+      "required": ["adapter", "library_path", "library_status"],
+      "properties": {
+        "adapter": {"type": "string", "minLength": 1},
+        "library_path": {"type": "string", "minLength": 1},
+        "library_status": {"type": "string", "minLength": 1},
+        "overwrite_existing": {"type": "boolean"},
+        "parameters": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "reconstruction": {
+      "type": "object",
+      "required": [
+        "sensitivity_kind",
+        "maximum_iterations",
+        "minimum_iterations",
+        "denominator_floor",
+        "sensitivity_floor",
+        "convergence_patience",
+        "snapshot_first_iterations",
+        "snapshot_interval"
+      ],
+      "properties": {
+        "sensitivity_kind": {
+          "enum": [
+            "conditional_acceptance_probability",
+            "effective_area_cm2",
+            "finite_distance_emitted_probability"
+          ]
+        },
+        "maximum_iterations": {"type": "integer", "minimum": 1},
+        "minimum_iterations": {"type": "integer", "minimum": 0},
+        "denominator_floor": {"type": "number", "exclusiveMinimum": 0},
+        "sensitivity_floor": {"type": "number", "minimum": 0},
+        "likelihood_relative_tolerance": {"type": ["number", "null"]},
+        "image_relative_tolerance": {"type": ["number", "null"]},
+        "convergence_patience": {"type": "integer", "minimum": 1},
+        "snapshot_first_iterations": {"type": "integer", "minimum": 0},
+        "snapshot_interval": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "event_response": {
+      "type": "object",
+      "required": ["model_id", "parameters"],
+      "properties": {
+        "model_id": {"type": "string", "minLength": 1},
+        "parameters": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "background": {
+      "type": "object",
+      "required": ["mode", "event_density", "expected_count"],
+      "properties": {
+        "mode": {"enum": ["none", "fixed_uniform_event_density"]},
+        "event_density": {"type": "number", "minimum": 0},
+        "expected_count": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "visualization": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "display_up_direction",
+        "smoothing_sigma_deg",
+        "smoothing_chunk_size",
+        "maximum_numpy_smoothing_pixels",
+        "raster_width",
+        "raster_height",
+        "dpi",
+        "energy_bands_mev",
+        "file_names"
+      ],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "display_up_direction": {"$ref": "#/$defs/vector3"},
+        "smoothing_sigma_deg": {"type": "number", "exclusiveMinimum": 0},
+        "smoothing_chunk_size": {"type": "integer", "minimum": 1},
+        "maximum_numpy_smoothing_pixels": {"type": "integer", "minimum": 1},
+        "raster_width": {"type": "integer", "minimum": 64},
+        "raster_height": {"type": "integer", "minimum": 32},
+        "dpi": {"type": "integer", "minimum": 50},
+        "energy_bands_mev": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}
+        },
+        "file_names": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": ["file_names"],
+      "properties": {
+        "file_names": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "number"}
+    }
+  },
+  "additionalProperties": false
+}

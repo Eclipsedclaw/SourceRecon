@@ -1,0 +1,80 @@
+{
+  "input": {
+    "type": "experiment_tsv",
+    "paths": {
+      "ch0": "/server/path/to/ch0.tsv",
+      "ch1": "/server/path/to/ch1.tsv",
+      "ch2": "/server/path/to/ch2.tsv"
+    },
+    "calibration_paths": {
+      "ch0": "/server/path/to/calibration_ch0.tsv",
+      "ch1": "/server/path/to/calibration_ch1.tsv",
+      "ch2": "/server/path/to/calibration_ch2.tsv"
+    },
+    "separator": "\t",
+    "order_mode": "layer",
+    "spectroscopy_channel": "ch0",
+    "minimum_hit_energy_mev": 0.0,
+    "channel_to_layer": {
+      "ch2": 0,
+      "ch1": 1,
+      "ch0": 2
+    },
+    "columns": {
+      "event_id": "EventID",
+      "pixel_id": "PixelID",
+      "adc": "TotalEnergy",
+      "x_mm": "pos_x_mm",
+      "y_mm": "pos_y_mm",
+      "z_mm": "z"
+    },
+    "calibration_columns": {
+      "pixel_id": "PixelID",
+      "slope_kev_per_adc": "a(keV/ADC)",
+      "intercept_kev": "b(keV)"
+    }
+  },
+  "spectrum": {
+    "mode": "ch0_observed",
+    "minimum_energy_mev": 0.10,
+    "maximum_energy_mev": 2.00,
+    "energy_step_mev": 0.01,
+    "kde_bandwidth_mev": 0.03,
+    "probability_floor": 1e-12
+  },
+  "response": {
+    "energy_resolution": {
+      "fractional_sigma": 0.04,
+      "noise_sigma_mev": 0.005
+    },
+    "full_absorption_probability_by_terminal_channel": {
+      "ch0": 0.25,
+      "ch1": 0.10,
+      "ch2": 0.05
+    },
+    "default_full_absorption_probability": 0.10,
+    "escape_energy_scale_mev": 0.25,
+    "three_hit_geometry_fractional_sigma": 0.10,
+    "arm_sigma_deg_by_hit_count": {
+      "2": 5.0,
+      "3": 4.0,
+      "default": 5.0
+    },
+    "minimum_hypothesis_weight": 1e-15
+  },
+  "attitude": {
+    "mode": "identity"
+  },
+  "reconstruction": {
+    "healpix_nside": 32,
+    "healpix_nested": false,
+    "sweeps": 2000,
+    "burn_in_sweeps": 500,
+    "thinning_sweeps": 10,
+    "random_seed": 20260730
+  },
+  "output": {
+    "directory": "../output/experiment"
+  }
+}
+

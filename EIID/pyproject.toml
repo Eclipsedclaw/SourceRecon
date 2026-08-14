@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eiid-compton-reconstruction"
+version = "0.1.0"
+description = "康普顿相机能量—天空方向联合域 EIID/LM-MLEM 重建程序"
+readme = {file = "README.txt", content-type = "text/plain"}
+requires-python = ">=3.8"
+authors = [{name = "EIID Project"}]
+dependencies = [
+  "numpy>=1.23",
+]
+
+[project.optional-dependencies]
+visualization = [
+  "matplotlib>=3.6",
+]
+io = [
+  "pandas>=1.5",
+  "uproot>=5.0",
+  "awkward>=2.0",
+  "PyYAML>=6.0",
+]
+science = [
+  "scipy>=1.9",
+  "healpy>=1.16",
+  "matplotlib>=3.6",
+  "h5py>=3.8",
+]
+server = [
+  "psutil>=5.9",
+]
+test = [
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+]
+all = [
+  "pandas>=1.5",
+  "uproot>=5.0",
+  "awkward>=2.0",
+  "PyYAML>=6.0",
+  "scipy>=1.9",
+  "healpy>=1.16",
+  "matplotlib>=3.6",
+  "h5py>=3.8",
+  "psutil>=5.9",
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["eiid*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

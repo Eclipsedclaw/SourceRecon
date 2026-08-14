@@ -1,0 +1,9 @@
+numpy>=1.23
+pandas>=1.5
+matplotlib>=3.6
+uproot>=5.0
+awkward>=2.0
+# 服务器当前使用 Python 3.8。healpy 1.16.1 是明确支持 Python 3.8
+# 的版本；更新的 healpy 已逐步把最低 Python 提升到 3.9/3.10。
+healpy==1.16.1
+pytest>=7.0

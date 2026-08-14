@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+dist/
+build/
+
+# 运行结果和响应 campaign 可能非常大，必须通过配置写到独立目录。
+logs/
+runs/
+output/
+response_campaign/
+*.root
+*.h5
+*.hdf5
+*.npz
+

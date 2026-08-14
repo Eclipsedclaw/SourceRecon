@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EIID batch manifest",
+  "type": "object",
+  "required": ["schema_version", "project_root", "maximum_workers", "memory_guard", "datasets"],
+  "properties": {
+    "schema_version": {"const": "eiid.batch.v1"},
+    "project_root": {"type": "string", "minLength": 1},
+    "python_executable": {"type": "string"},
+    "maximum_workers": {"type": "integer", "minimum": 1},
+    "skip_completed": {"type": "boolean"},
+    "batch_output_root": {"type": "string", "minLength": 1},
+    "memory_guard": {
+      "type": "object",
+      "required": ["enabled", "minimum_available_gib", "estimated_worker_peak_gib"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "minimum_available_gib": {"type": "number", "exclusiveMinimum": 0},
+        "estimated_worker_peak_gib": {"type": "number", "exclusiveMinimum": 0},
+        "poll_interval_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "maximum_retries": {"type": "integer", "minimum": 0},
+        "termination_grace_seconds": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "datasets": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["dataset_id", "config"],
+        "properties": {
+          "dataset_id": {"type": "string", "minLength": 1},
+          "config": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

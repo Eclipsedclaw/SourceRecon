@@ -1,0 +1,21 @@
+{
+  "schema_version": "eiid.batch.v1",
+  "project_root": "../..",
+  "maximum_workers": 5,
+  "skip_completed": true,
+  "batch_output_root": "batch_runs",
+  "memory_guard": {
+    "enabled": true,
+    "minimum_available_gib": 8.0,
+    "estimated_worker_peak_gib": 4.0,
+    "poll_interval_seconds": 2.0,
+    "maximum_retries": 2,
+    "termination_grace_seconds": 20.0
+  },
+  "datasets": [
+    {
+      "dataset_id": "REPLACE_DATASET_001",
+      "config": "config/production/REPLACE_DATASET_001.json"
+    }
+  ]
+}

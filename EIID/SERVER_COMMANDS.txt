@@ -1,0 +1,282 @@
+EIID 服务器运行指令集
+====================
+
+说明
+----
+
+本文件随项目阶段持续更新。命令中的路径均为示例，可通过环境变量或命令行参数
+替换，程序代码不会写死服务器路径。
+
+重要原则：
+
+  1. 每个数据集 worker 内将 BLAS/OpenMP 线程限制为 1；
+  2. 使用数据集级多进程利用多个 CPU 核；
+  3. --workers 是上限，实际并发由内存保护器动态降低；
+  4. Python 必须使用 -u，日志立即刷新；
+  5. 使用 set -o pipefail，保证 tee 不会掩盖 Python 失败退出码；
+  6. 2>&1 | tee -a 同时输出到终端和日志文件。
+
+一、首次安装
+------------
+
+本项目在服务器上的唯一根目录固定为：
+
+  /home/ezqi/labwork/SourceRecon/EIID
+
+代码、输入数据、响应 campaign、响应库、运行结果、checkpoint 和日志均放在此
+目录下，以隔离 SOE 和其他重建程序。Python 位于：
+
+  /home/ezqi/miniconda3/envs/py38/bin/python
+
+执行：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  /home/ezqi/miniconda3/envs/py38/bin/python -m pip install -U pip setuptools wheel
+  /home/ezqi/miniconda3/envs/py38/bin/python -m pip install -e '.[all]'
+
+如果只运行阶段 1 基础验证，只需：
+
+  /home/ezqi/miniconda3/envs/py38/bin/python -m pip install -e .
+
+二、阶段 1 基础验证：终端和日志同时输出
+------------------------------------------
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  mkdir -p logs
+  set -o pipefail
+  OMP_NUM_THREADS=1 \
+  OPENBLAS_NUM_THREADS=1 \
+  MKL_NUM_THREADS=1 \
+  NUMEXPR_NUM_THREADS=1 \
+  VECLIB_MAXIMUM_THREADS=1 \
+  BLIS_NUM_THREADS=1 \
+  /home/ezqi/miniconda3/envs/py38/bin/python -u \
+    scripts/validate_foundation.py \
+    --config config/examples/foundation_smoke.json \
+    2>&1 | tee -a logs/foundation_validation.log
+
+也可以使用封装脚本：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  chmod +x scripts/run_foundation_server.sh
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_foundation_server.sh
+
+三、运行全部测试
+----------------
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  mkdir -p logs
+  /home/ezqi/miniconda3/envs/py38/bin/python \
+    -m unittest discover -s tests -p 'test_*.py' -v \
+    2>&1 | tee -a logs/unit_tests.log
+
+安装 pytest 后：
+
+  /home/ezqi/miniconda3/envs/py38/bin/python -m pytest -q \
+    2>&1 | tee -a logs/pytest.log
+
+阶段 2 输入链验证：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  mkdir -p logs
+  set -o pipefail
+  OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  NUMEXPR_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 BLIS_NUM_THREADS=1 \
+  /home/ezqi/miniconda3/envs/py38/bin/python -u \
+    scripts/validate_stage2_input.py \
+    --config config/examples/experiment_delimited_smoke.json \
+    2>&1 | tee -a logs/stage2_input_validation.log
+
+也可以使用会自动创建日志目录的封装脚本：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  chmod +x scripts/run_stage2_input_server.sh
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_stage2_input_server.sh
+
+阶段 3 响应接口、灵敏度归一化和原型库往返验证：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  mkdir -p logs
+  RUN_ID=$(/home/ezqi/miniconda3/envs/py38/bin/python \
+    scripts/generate_run_id.py \
+    --kind stage3_response \
+    --config config/examples/stage3_response_smoke.json)
+  export EIID_RUN_ID="$RUN_ID"
+  export EIID_LOG_PATH="logs/${RUN_ID}.log"
+  set -o pipefail
+  OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  NUMEXPR_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 BLIS_NUM_THREADS=1 \
+  /home/ezqi/miniconda3/envs/py38/bin/python -u \
+    scripts/validate_stage3_response.py \
+    --config config/examples/stage3_response_smoke.json \
+    2>&1 | tee -a "$EIID_LOG_PATH"
+
+推荐使用自动生成统一 run_id 的封装脚本：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  chmod +x scripts/run_stage3_response_server.sh
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_stage3_response_server.sh
+
+注意：阶段 3 示例使用 synthetic 计数和显式 prototype 格式，只验证软件接口、
+Omega/(4*pi) 归一化及文件完整性，不能用于正式物理分析。
+
+阶段 4 统一运行身份、LM-MLEM、逐迭代遥测和 checkpoint 验证：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  chmod +x scripts/run_stage4_lmmlem_server.sh
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_stage4_lmmlem_server.sh
+
+包装器会先生成同一个 run_id，并用于：
+
+  logs/<run_id>.log
+  runs/<run_id>/
+  response_campaign/response_library/<library_id>/<run_id>/
+
+只有 SUCCESS.json 存在且 manifest/数组校验通过时，后续批处理才允许跳过该
+数据集。目录存在但没有 SUCCESS.json 视为未完成或失败。
+
+阶段 5 实验输入、解析事件核、LM-MLEM 和图片端到端验证：
+
+首次运行如缺少 matplotlib：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  /home/ezqi/miniconda3/envs/py38/bin/python -m pip install -e '.[visualization]'
+
+执行：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  chmod +x scripts/run_stage5_end_to_end_server.sh
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_stage5_end_to_end_server.sh
+
+若某次运行被中断或标记为失败，可从它的最新完整 checkpoint 续跑：
+
+  EIID_RESUME_FROM_RUN_ID=<失败或中断的_run_id> \
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_stage5_end_to_end_server.sh
+
+续跑会创建新的 run_id，并在 manifest 中记录父 run 和 checkpoint；不会覆盖原目录。
+已经带 SUCCESS.json 的 run 会被明确拒绝续跑，防止重复或误覆盖。
+
+输出写入同一个 runs/<run_id>/，包括：
+
+  figures/skymap/                 raw 和 smoothed 像素填充天空图
+  figures/spectra/                重建能谱
+  figures/joint_energy_sky/       方向—能量联合分布
+  figures/convergence/            似然、图像和能谱变化
+  figures/diagnostics/            总览 dashboard
+  numerical/final_joint_image.npz
+  numerical/event_summary.csv
+  dataset_metadata.json
+  reconstruction_summary.json
+  checkpoints/
+  SUCCESS.json
+
+注意：stage5 smoke 使用解析相对似然和 prototype 单位灵敏度，所有图片只用于
+软件链、坐标和绘图检查，不得作为正式物理结果。
+
+visualization.smoothing_chunk_size 控制球面平滑的分块大小；
+visualization.maximum_numpy_smoothing_pixels 是纯 NumPy 后备实现允许的最大
+HEALPix 像素数。超限时程序会明确失败并保留 checkpoint，避免无提示地耗尽内存。
+
+四、正式响应构建、单数据集和批处理
+----------------------------------
+
+复制并修改生产模板，所有 REPLACE_* 和暂定阈值必须替换或确认。
+
+构建响应库：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  EIID_RESPONSE_BUILD_CONFIG=config/production/response_build.json \
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_response_build_server.sh
+
+独立校验响应库：
+
+  /home/ezqi/miniconda3/envs/py38/bin/python -u \
+    scripts/validate_response_library.py \
+    --adapter portable_npz_json_v1 \
+    --library response_campaign/response_library/<library_id> \
+    --require-validated-physical
+
+单数据集生产重建：
+
+  EIID_CONFIG=config/production/<dataset_id>.json \
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_single_reconstruction_server.sh
+
+从中断 checkpoint 续跑：
+
+  EIID_RESUME_FROM_RUN_ID=<parent_run_id> \
+  EIID_CONFIG=config/production/<dataset_id>.json \
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_single_reconstruction_server.sh
+
+全部数据集一次性运行：
+
+  EIID_BATCH_MANIFEST=config/production/batch_manifest.json \
+  EIID_PYTHON=/home/ezqi/miniconda3/envs/py38/bin/python \
+    bash scripts/run_production_batch_server.sh
+
+五、SSH 断开后继续运行
+----------------------
+
+推荐优先使用 tmux 或服务器作业系统。tmux 示例：
+
+  tmux new -s eiid
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  EIID_BATCH_MANIFEST=config/production/batch_manifest.json \
+    bash scripts/run_production_batch_server.sh
+
+脱离会话：Ctrl-b，然后按 d。恢复：
+
+  tmux attach -t eiid
+
+如必须使用 nohup，应让内部 Bash 开启 pipefail：
+
+  cd /home/ezqi/labwork/SourceRecon/EIID
+  mkdir -p logs
+  nohup bash -lc '
+    set -o pipefail
+    cd /home/ezqi/labwork/SourceRecon/EIID
+    OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+    NUMEXPR_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 BLIS_NUM_THREADS=1 \
+    /home/ezqi/miniconda3/envs/py38/bin/python -u \
+      main_batch.py --manifest config/production/batch_manifest.json \
+      --python /home/ezqi/miniconda3/envs/py38/bin/python \
+      2>&1 | tee -a logs/production_batch.log
+  ' > logs/production_batch_launcher.log 2>&1 &
+
+六、监控
+--------
+
+  tail -f logs/production_batch.log
+  watch -n 2 free -h
+  watch -n 2 'ps -eo pid,ppid,%cpu,%mem,rss,etime,cmd --sort=-rss | head -20'
+
+正式批处理生成：
+
+  memory_telemetry.csv
+  batch_manifest.json
+  failed_datasets.json
+  每数据集 checkpoints/
+  每数据集 SUCCESS.json 或 FAILURE.json
+
+七、服务器隔离目录建议
+----------------------
+
+  /home/ezqi/labwork/SourceRecon/EIID/
+    data/input/                 模拟和实验原始输入
+    response_campaign/         Geant4 响应 campaign 及响应库
+    runs/                       每次重建结果和 checkpoint
+    logs/                       终端日志
+    config/                     配置及 schema
+    eiid/                       Python 包
+    scripts/                    稳定运行入口
+
+配置加载器会验证输入、响应、结果和日志路径均位于上述 EIID 根目录内；例如
+`../../../SOE` 或 `/data/shared/outside-EIID` 会被拒绝。

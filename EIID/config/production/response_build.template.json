@@ -1,0 +1,36 @@
+{
+  "schema_version": "eiid.response_build.v1",
+  "project_root": "../..",
+  "adapter": "portable_npz_json_v1",
+  "node_statistics_npz": "response_campaign/digitized/REPLACE_WITH_NODE_STATISTICS.npz",
+  "output_library": "response_campaign/response_library/REPLACE_WITH_LIBRARY_ID",
+  "overwrite": false,
+  "grid": {
+    "nside": 16,
+    "nested": false,
+    "minimum_mev": 0.1,
+    "maximum_mev": 3.0,
+    "bin_width_mev": 0.05
+  },
+  "metadata": {
+    "library_id": "REPLACE_WITH_LIBRARY_ID",
+    "library_status": "candidate_unvalidated",
+    "geometry_version": "REPLACE_WITH_GEOMETRY_HASH",
+    "physics_list": "REPLACE_WITH_VALIDATED_PHYSICS_LIST",
+    "digitizer_version": "REPLACE_WITH_DIGITIZER_VERSION",
+    "producer_run_id": null,
+    "attributes": {
+      "geant4_version": "REPLACE_WITH_GEANT4_VERSION",
+      "production_cuts": "REPLACE_WITH_EXPLICIT_VALUE",
+      "validation_note": "candidate_unvalidated cannot be used as formal physics",
+      "validation_report_sha256": "REQUIRED_WHEN_STATUS_IS_validated_physical",
+      "validation_dataset_id": "REQUIRED_WHEN_STATUS_IS_validated_physical",
+      "validation_completed_utc": "REQUIRED_WHEN_STATUS_IS_validated_physical"
+    }
+  },
+  "normalization": {
+    "source_mode": "far_field_parallel_beam",
+    "generation_area_cm2": 100.0,
+    "generated_count_included_zero_deposit_events": true
+  }
+}

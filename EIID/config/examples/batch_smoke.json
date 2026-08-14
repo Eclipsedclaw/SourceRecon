@@ -1,0 +1,21 @@
+{
+  "schema_version": "eiid.batch.v1",
+  "project_root": "../..",
+  "maximum_workers": 2,
+  "skip_completed": true,
+  "batch_output_root": "batch_runs",
+  "memory_guard": {
+    "enabled": true,
+    "minimum_available_gib": 1.0,
+    "estimated_worker_peak_gib": 0.5,
+    "poll_interval_seconds": 0.5,
+    "maximum_retries": 1,
+    "termination_grace_seconds": 10.0
+  },
+  "datasets": [
+    {
+      "dataset_id": "stage5_smoke",
+      "config": "config/examples/stage5_end_to_end_smoke.json"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "0.1.0",
+  "profile_purpose": "production_template_replace_all_unconfirmed_values_before_use",
+  "paths": {
+    "project_root": "../..",
+    "input_root": "../../data/input",
+    "response_root": "../../response_campaign/response_library",
+    "output_root": "../../runs",
+    "log_root": "../../logs"
+  },
+  "coordinates": {
+    "detector_stack_direction": [0.0, 0.0, 1.0],
+    "camera_boresight_source_direction": [0.0, 0.0, -1.0]
+  },
+  "channel_mapping": {
+    "chamber_to_channel": {"0": "ch2", "1": "ch1", "2": "ch0"},
+    "channel_to_layer": {"ch2": 0, "ch1": 1, "ch0": 2}
+  },
+  "energy_grid": {"minimum_mev": 0.1, "maximum_mev": 3.0, "bin_width_mev": 0.05},
+  "sky_grid": {"type": "healpix", "nside": 16, "nested": false},
+  "trigger": {
+    "required_channels": ["ch1", "ch2"],
+    "minimum_hit_energy_mev": {"ch0": 0.0, "ch1": 0.0, "ch2": 0.0},
+    "coincidence_window_ns": 5.0
+  },
+  "runtime": {"numerical_threads_per_worker": 1},
+  "batch": {
+    "maximum_workers": 5,
+    "memory_guard": {
+      "enabled": true,
+      "minimum_available_gib": 8.0,
+      "estimated_worker_peak_gib": 4.0,
+      "poll_interval_seconds": 2.0,
+      "maximum_retries": 2
+    }
+  },
+  "input": {
+    "type": "experiment_delimited",
+    "dataset_id": "REPLACE_DATASET_ID",
+    "paths": {
+      "ch0": "../../data/input/REPLACE_CH0.tsv",
+      "ch1": "../../data/input/REPLACE_CH1.tsv",
+      "ch2": "../../data/input/REPLACE_CH2.tsv"
+    },
+    "delimiter": "\t",
+    "energy_mode": "direct_mev",
+    "columns": {
+      "event_id": "EventID", "pixel_id": "PixelID", "energy_mev": "Energy_MeV",
+      "adc": null, "x_mm": "X_mm", "y_mm": "Y_mm", "z_mm": "Z_mm", "time_ns": "Time_ns"
+    }
+  },
+  "response": {
+    "adapter": "portable_npz_json_v1",
+    "library_path": "../../response_campaign/response_library/REPLACE_WITH_LIBRARY_ID",
+    "library_status": "validated_physical",
+    "overwrite_existing": false,
+    "parameters": {}
+  },
+  "event_response": {
+    "model_id": "hybrid_monte_carlo_arm_v1",
+    "parameters": {"minimum_relative_weight": 1e-8, "allow_unvalidated_response": false}
+  },
+  "background": {
+    "mode": "fixed_uniform_event_density",
+    "event_density": 1e-6,
+    "expected_count": 0.0
+  },
+  "reconstruction": {
+    "sensitivity_kind": "effective_area_cm2",
+    "maximum_iterations": 200,
+    "minimum_iterations": 10,
+    "denominator_floor": 1e-12,
+    "sensitivity_floor": 1e-12,
+    "likelihood_relative_tolerance": 1e-7,
+    "image_relative_tolerance": 1e-5,
+    "convergence_patience": 5,
+    "snapshot_first_iterations": 5,
+    "snapshot_interval": 10
+  },
+  "visualization": {
+    "enabled": true,
+    "display_up_direction": [0.0, 1.0, 0.0],
+    "smoothing_sigma_deg": 5.0,
+    "smoothing_chunk_size": 128,
+    "maximum_numpy_smoothing_pixels": 3072,
+    "raster_width": 720,
+    "raster_height": 360,
+    "dpi": 150,
+    "energy_bands_mev": [[0.1, 0.5], [0.5, 1.0], [1.0, 1.5], [1.5, 3.0]],
+    "file_names": {
+      "full_sky_raw": "full_sky_raw_camera_centered.png",
+      "front_raw": "camera_front_raw.png",
+      "front_smoothed": "camera_front_smoothed.png",
+      "front_centered": "camera_front_centered_display.png",
+      "planar_projection": "camera_centered_planar_projection.png",
+      "source_zoom": "camera_front_source_zoom.png",
+      "energy_spectrum": "reconstructed_energy_spectrum.png",
+      "energy_band_skymaps": "energy_band_skymaps.png",
+      "joint_distribution": "joint_direction_energy.png",
+      "convergence": "convergence_metrics.png",
+      "iteration_snapshots": "iteration_snapshots.png",
+      "event_diagnostics": "event_response_diagnostics.png",
+      "dashboard": "reconstruction_dashboard.png"
+    }
+  },
+  "output": {
+    "file_names": {
+      "final_joint_image": "final_joint_image.npz",
+      "event_summary": "event_summary.csv",
+      "reconstruction_summary": "reconstruction_summary.json",
+      "dataset_metadata": "dataset_metadata.json"
+    }
+  }
+}

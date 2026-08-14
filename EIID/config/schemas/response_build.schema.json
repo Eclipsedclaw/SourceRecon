@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EIID response library build configuration",
+  "type": "object",
+  "required": ["schema_version", "project_root", "adapter", "node_statistics_npz", "output_library", "grid", "metadata", "normalization"],
+  "properties": {
+    "schema_version": {"const": "eiid.response_build.v1"},
+    "project_root": {"type": "string", "minLength": 1},
+    "adapter": {"const": "portable_npz_json_v1"},
+    "node_statistics_npz": {"type": "string", "minLength": 1},
+    "output_library": {"type": "string", "minLength": 1},
+    "overwrite": {"type": "boolean"},
+    "grid": {"type": "object"},
+    "metadata": {"type": "object"},
+    "normalization": {"type": "object"}
+  },
+  "additionalProperties": false
+}
