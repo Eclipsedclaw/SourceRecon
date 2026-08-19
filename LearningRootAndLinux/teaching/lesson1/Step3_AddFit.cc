@@ -56,7 +56,7 @@ void Step3_AddFit()
     auto inputFile = std::unique_ptr<TFile>{TFile::Open("kinematics.root", "READ")};
 
     // TFile::Open 必须返回堆对象，是 ROOT 接口的历史设计；
-    // unique_ptr 在接口边界立即接管所有权，把后续代码恢复为 RAII 风格。
+    // unique_ptr 在接口边界立即接管所有权，把后续代码恢复为 RAII（Resource Acquisition Is Initialization资源获取即初始化） 风格。
     if (!inputFile || inputFile->IsZombie()) {
         std::cerr << "Error: cannot open kinematics.root; run Step1 first.\n";
         return;
@@ -136,7 +136,7 @@ void Step3_AddFit()
         histogram->GetStdDev());
 
     // 参数顺序必须与 "gaus" 的定义一致：
-    // 参数 0 主要控制峰高，参数 1 控制峰中心，参数 2 控制峰宽。
+    // 参数 0 主要控制峰高，参数 1 控制峰中心，参数 2 控制峰宽。 
     // 初值不是最终结果；Fit 会在这些值附近开始迭代并不断更新它们。
 
     // TStyle 控制 ROOT 图形的全局显示风格；gStyle 是 ROOT 提供的当前 TStyle 对象指针。
@@ -163,7 +163,6 @@ void Step3_AddFit()
     // Fit 的 S 选项要求 ROOT 返回并保存完整结果，便于显式检查拟合是否收敛。
     const TFitResultPtr fitResult{histogram->Fit(&gaussianFit, "S")};
     const int fitStatus{static_cast<int>(fitResult)};
-
     // &gaussianFit 是地址，因为 Fit 需要访问并修改同一个 TF1 对象中的参数。
     // 若按值传递，优化器只能修改副本，调用者随后就无法从原对象取得结果。
     // static_cast<int> 是显式、可搜索的 C++ 转换，避免旧式 (int) 强转。
@@ -198,7 +197,7 @@ void Step3_AddFit()
     // Fit() 改变了画布内容；显式刷新后，拟合曲线和统计框会立即出现在 X11 窗口中。
     canvas->Modified();
     canvas->Update();
-
+    canvas->SaveAs("Step3_output.png");
     // 函数返回时，局部 gaussianFit 和 fitResult 会析构；输入文件也会自动关闭。
     // static histogram 保存了 bin 内容和 Fit 关联的绘图函数副本，static canvas 保存显示窗口。
     // 因此关闭 ROOT 进程之前，X11 窗口仍可重绘、缩放并查看统计框。

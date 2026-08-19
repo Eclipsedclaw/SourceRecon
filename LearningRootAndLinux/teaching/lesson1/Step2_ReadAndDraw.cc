@@ -193,5 +193,23 @@ void Step2_ReadAndDraw()
     // inputFile 很快会随函数返回而关闭，但 histogram 已经 SetDirectory(nullptr)。
     // 所以 GUI 后续重绘只依赖内存中的 histogram，不再依赖磁盘文件或 tree。
 
+    // ----------------------------------------------------------------------------------------------------
+    // 图形渲染与对象生命周期机制：
+    //
+    // 1. 引用式绘制（Non-copying Draw）：
+    //    canvas 绘制直方图时不会复制数据，仅持有 histogram 的指针。
+    //    因此 histogram 的生命周期必须覆盖 canvas 的整个生命周期（即只要窗口还在，histogram 就必须活在内存里）。
+    //
+    // 2. 强制实时刷新机制：
+    //    canvas->Modified();  标记画布内容已更新，通知图形系统重绘。
+    //    canvas->Update();    立即将绘图命令推送到 Linux X11 窗口，无需等待 GUI 事件循环，实现即时渲染。
+    //
+    // 3. 数据独立性与析构时机：
+    //    先前调用过 histogram->SetDirectory(nullptr)，即使输入文件/TTree 已关闭，GUI 重绘依然安全。
+    //    由于使用 static unique_ptr 托管，关闭本地 X11 窗口仅关闭显示界面，内存中的对象不会立刻析构；
+    //    它们会在下一次运行本函数重置（reset）时、或整个 ROOT 会话退出（.q）时统一进行析构释放。
+    // ----------------------------------------------------------------------------------------------------
+
     std::cout << "Read and plotted " << acceptedEvents << " events.\n";
+    canvas->SaveAs("output.png");
 }
