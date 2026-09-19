@@ -1,0 +1,15 @@
+universe = vanilla
+executable = @@PYTHON@@
+arguments = @@PROJECT@@/cluster/workflow.py job --manifest @@MANIFEST@@ $(Process)
+initialdir = @@PROJECT@@
+getenv = False
+should_transfer_files = NO
+request_cpus = @@THREADS@@
+request_memory = @@MEMORY@@MB
+request_disk = @@DISK@@MB
+requirements = @@REQUIREMENTS@@
+@@OS_ATTRIBUTE@@
+log = @@RUN@@/logs/scheduler.log
+output = @@RUN@@/logs/condor_$(Cluster)_$(Process).out
+error = @@RUN@@/logs/condor_$(Cluster)_$(Process).err
+queue @@JOBS@@

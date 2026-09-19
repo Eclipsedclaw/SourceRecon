@@ -1,0 +1,46 @@
+{
+    "inputs": [
+        {
+            "file": "../../DopplerSampleGenerator/output/livermore_0p300.root",
+            "tree": "SelectedEvents",
+            "level": "detector",
+            "compton_model": "livermore"
+        },
+        {
+            "file": "../../DopplerSampleGenerator/output/livermore_0p500.root",
+            "tree": "SelectedEvents",
+            "level": "detector",
+            "compton_model": "livermore"
+        },
+        {
+            "file": "../../DopplerSampleGenerator/output/livermore_0p662.root",
+            "tree": "SelectedEvents",
+            "level": "detector",
+            "compton_model": "livermore"
+        },
+        {
+            "file": "../../DopplerSampleGenerator/output/livermore_1p000.root",
+            "tree": "SelectedEvents",
+            "level": "detector",
+            "compton_model": "livermore"
+        },
+        {
+            "file": "../../DopplerSampleGenerator/output/livermore_2p000.root",
+            "tree": "SelectedEvents",
+            "level": "detector",
+            "compton_model": "livermore"
+        }
+    ],
+    "output_root_file": "../../doppler_response.root",
+    "output_parameter_tree": "ResponseParameters",
+    "output_histogram_name": "EmpiricalDetectorArmPdf",
+    "output_comparison_json": "../output/model_comparison.json",
+    "figures_directory": "../figures",
+    "scatter_angle_edges_degree": [0.0, 180.0],
+    "arm_bin_count": 400,
+    "arm_min_degree": -25.0,
+    "arm_max_degree": 25.0,
+    "minimum_events_per_bin": 10,
+    "minimum_test_events_per_bin": 3,
+    "test_fraction": 0.2
+}

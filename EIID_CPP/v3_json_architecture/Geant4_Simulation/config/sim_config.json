@@ -1,0 +1,28 @@
+{
+  "mode": 0,
+  "random_seed": 20260819,
+  "source": {
+    "particle_name": "gamma",
+    "hemisphere_radius_mm": 40.0,
+    "front_hemisphere_only": true,
+    "emission_cone_half_angle_degree": 5.0
+  },
+  "grid": {
+    "healpix_nside": 8,
+    "energy_point_count": 50,
+    "energy_min_MeV": 0.3,
+    "energy_max_MeV": 2.0,
+    "particles_per_cell": 100
+  },
+  "trigger": {
+    "front_chamber_id": 0,
+    "rear_chamber_id": 1,
+    "minimum_layer_energy_MeV": 1.0e-9
+  },
+  "output": {
+    "sensitivity_root_file": "../../sensitivity_master.root",
+    "sensitivity_tree_name": "Sensitivity",
+    "events_root_file": "../../events.root",
+    "events_tree_name": "Events"
+  }
+}

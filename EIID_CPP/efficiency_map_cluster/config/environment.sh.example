@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# 可选覆盖：通常直接 make configure，不必复制或修改这个文件。
+# 自动搜索当前环境、常见 root-env 和 /opt/geant4/*-install；不会安装任何软件。
+# 自动查找失败，或课题组要求加载指定工具链时，才复制为 environment.sh。
+# 小服务器示例（确认安装位置后再取消注释）：
+# source /home/ezqi/miniconda3/etc/profile.d/conda.sh
+# conda activate root-env
+# source /opt/geant4/geant4-11.2.2-install/bin/geant4.sh
+# export CMAKE_PREFIX_PATH="/opt/geant4/geant4-11.2.2-install:$CONDA_PREFIX:${CMAKE_PREFIX_PATH:-}"
+# 如确实需要更换编译器：export CXX=/实际路径/bin/g++
+# 注意已有 CMakeCache.txt 会保留编译器；更换时将 build 改名备份后重新 configure。
+# Cluster：加载课题组提供的同一套编译器、ROOT、Geant4-MT、HEALPix 环境。
+# 不要照抄小服务器路径，也不要加载文档举例的旧 Geant4 10.02。
+# source /cvmfs/.../你实际选用的环境/setup.sh

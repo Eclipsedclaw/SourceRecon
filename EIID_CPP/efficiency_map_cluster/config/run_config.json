@@ -1,0 +1,7 @@
+{
+  "threads": 4,
+  "jobs": 2,
+  "events_per_chunk": 70000,
+  "master_seed": 20260913,
+  "output_directory": "../runs/smoke_001"
+}

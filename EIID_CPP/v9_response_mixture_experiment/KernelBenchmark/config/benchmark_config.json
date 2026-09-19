@@ -1,0 +1,27 @@
+{
+    "inputs": [
+        {
+            "label": "Voigt response",
+            "kernel_type": "voigt",
+            "file": "../../runs/latest/reconstruction/result_voigt.root",
+            "tree": "EiidImage"
+        },
+        {
+            "label": "Double-Gaussian response",
+            "kernel_type": "double_gaussian",
+            "file": "../../runs/latest/reconstruction/result_double_gaussian.root",
+            "tree": "EiidImage"
+        },
+        {
+            "label": "Gaussian-Lorentzian mixture response",
+            "kernel_type": "gaussian_lorentzian_mixture",
+            "file": "../../runs/latest/reconstruction/result_gaussian_lorentzian_mixture.root",
+            "tree": "EiidImage"
+        }
+    ],
+    "model_status_json": "../../runs/latest/calibration/model_status.json",
+    "calibration_comparison_json": "../../runs/latest/calibration/model_comparison.json",
+    "truth_info_file": "../../Visualization/config/truth_info.json",
+    "output_json": "../../runs/latest/benchmark/kernel_benchmark.json",
+    "figures_directory": "../../runs/latest/benchmark/figures"
+}

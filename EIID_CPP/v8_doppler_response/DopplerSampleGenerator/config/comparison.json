@@ -1,0 +1,28 @@
+{
+    "tree_name": "SelectedEvents",
+    "source_energy_MeV": 0.662,
+    "histogram_bins": 240,
+    "arm_range_degree": [-20.0, 20.0],
+    "energy_residual_range_MeV": [-0.10, 0.10],
+    "arm_tail_threshold_degree": 10.0,
+    "relative_energy_tail_threshold": 0.10,
+    "figures_directory": "../figures",
+    "summary_json": "../output/comparison_summary.json",
+    "inputs": [
+        {
+            "label": "Free electron",
+            "root_file": "../output/free.root",
+            "root_color": 1
+        },
+        {
+            "label": "Livermore",
+            "root_file": "../output/livermore.root",
+            "root_color": 4
+        },
+        {
+            "label": "LowEP (optional)",
+            "root_file": "../output/lowep.root",
+            "root_color": 2
+        }
+    ]
+}

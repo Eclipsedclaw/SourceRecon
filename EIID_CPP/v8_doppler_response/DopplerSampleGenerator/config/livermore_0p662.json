@@ -1,0 +1,22 @@
+{
+    "experiment_name": "v8_livermore_0p662_MeV",
+    "random_seed": 20260833,
+    "number_of_events": 1000000,
+    "physics": {"compton_model": "livermore", "atomic_relaxation": true},
+    "source": {
+        "particle_name": "gamma", "energy_MeV": 0.662,
+        "theta_degree": 165.0, "phi_degree": 180.0,
+        "hemisphere_radius_mm": 5000.0,
+        "emission_cone_safety_margin_degree": 0.1
+    },
+    "environment": {"world_material": "G4_Galactic", "world_margin_mm": 100.0},
+    "selection": {
+        "front_chamber_id": 0, "rear_chamber_id": 1,
+        "minimum_layer_energy_MeV": 1.0e-6
+    },
+    "output": {
+        "root_file": "../output/livermore_0p662.root",
+        "tree_name": "SelectedEvents",
+        "summary_json": "../output/livermore_0p662_summary.json"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "input_sensitivity_file": "../../sensitivity_master.root",
+    "input_sensitivity_tree": "Sensitivity",
+    "output_sensitivity_file": "../../sensitivity.root",
+    "output_sensitivity_tree": "Sensitivity",
+
+    "master_grid": {
+        "healpix_nside": 16,
+        "energy_min_MeV": 0.3,
+        "energy_max_MeV": 2.0,
+        "energy_point_count": 50
+    },
+
+    "target_grid": {
+        "healpix_nside": 8,
+        "energy_min_MeV": 0.3,
+        "energy_max_MeV": 2.0,
+        "energy_point_count": 50
+    },
+
+    "interpolation": "polygon",
+    "polygon_subdivision_factor": 1,
+    "require_full_coverage": true
+}

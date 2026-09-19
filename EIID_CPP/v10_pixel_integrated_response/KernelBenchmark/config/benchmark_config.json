@@ -1,0 +1,13 @@
+{
+    "inputs": [
+        {"label": "Pixel centre, Nside 8, 10 iterations", "kernel_type": "gaussian_lorentzian_mixture", "file": "../../runs/latest/reconstruction/center_nside8_i10.root", "tree": "EiidImage", "pixel_integration_strategy": "pixel_center", "reconstruction_nside": 8, "integration_nside": 8, "samples_per_pixel": 1, "iteration_count": 10},
+        {"label": "Integrated 16->32, 10 iterations", "kernel_type": "gaussian_lorentzian_mixture", "file": "../../runs/latest/reconstruction/integrated_nside16_32_i10.root", "tree": "EiidImage", "pixel_integration_strategy": "healpix_subpixel", "reconstruction_nside": 16, "integration_nside": 32, "samples_per_pixel": 4, "iteration_count": 10},
+        {"label": "Integrated 32->64, 10 iterations", "kernel_type": "gaussian_lorentzian_mixture", "file": "../../runs/latest/reconstruction/integrated_nside32_64_i10.root", "tree": "EiidImage", "pixel_integration_strategy": "healpix_subpixel", "reconstruction_nside": 32, "integration_nside": 64, "samples_per_pixel": 4, "iteration_count": 10},
+        {"label": "Integrated 32->64, 20 iterations", "kernel_type": "gaussian_lorentzian_mixture", "file": "../../runs/latest/reconstruction/integrated_nside32_64_i20.root", "tree": "EiidImage", "pixel_integration_strategy": "healpix_subpixel", "reconstruction_nside": 32, "integration_nside": 64, "samples_per_pixel": 4, "iteration_count": 20}
+    ],
+    "model_status_json": "../../runs/latest/calibration/model_status.json",
+    "calibration_comparison_json": "../../runs/latest/calibration/model_comparison.json",
+    "truth_info_file": "../../Visualization/config/truth_info.json",
+    "output_json": "../../runs/latest/benchmark/pixel_integration_benchmark.json",
+    "figures_directory": "../../runs/latest/benchmark/figures"
+}

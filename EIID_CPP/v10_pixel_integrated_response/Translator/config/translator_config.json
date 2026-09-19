@@ -1,0 +1,28 @@
+{
+    "raw_input_file": "../../raw_steps.root",
+    "raw_input_tree": "Tree1",
+    "output_events_file": "../../translated_events.root",
+    "output_events_tree": "Events",
+    "front_chamber_id": 0,
+    "rear_chamber_id": 1,
+    "minimum_layer_energy_MeV": 0.0,
+
+    "raw_branches": {
+        "event_id": "eventID",
+        "chamber_id": "chamberID",
+        "x": "x_post",
+        "y": "y_post",
+        "z": "z_post",
+        "energy_deposit_MeV": "eDep_MeV"
+    },
+
+    "output_branches": {
+        "r1_x": "r1_x",
+        "r1_y": "r1_y",
+        "r1_z": "r1_z",
+        "r2_x": "r2_x",
+        "r2_y": "r2_y",
+        "r2_z": "r2_z",
+        "e1_MeV": "e1_MeV"
+    }
+}

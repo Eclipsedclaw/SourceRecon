@@ -1,0 +1,39 @@
+{
+    "input_events_file": "../../events.root",
+    "input_events_tree": "Events",
+    "output_result_file": "../../runs/latest/reconstruction/result_voigt.root",
+    "output_result_tree": "EiidImage",
+    "absolute_efficiency_file": "../../runs/latest/efficiency/absolute_efficiency_nside8.root",
+    "absolute_efficiency_tree": "AbsoluteEfficiency",
+    "healpix_nside": 8,
+    "healpix_ordering": "RING",
+    "energy_min_MeV": 0.3,
+    "energy_max_MeV": 2.0,
+    "energy_point_count": 50,
+    "iteration_count": 10,
+    "response_sigma_degree": 6.0,
+    "response_kernel": {
+        "type": "voigt",
+        "fixed_sigma_degree": 6.0,
+        "calibration_file": "../../runs/latest/calibration/doppler_response.root",
+        "parameter_tree": "ResponseParameters",
+        "histogram_name": "EmpiricalDetectorArmPdf"
+    },
+    "pixel_integration": {"strategy": "pixel_center", "integration_nside": 8},
+    "denominator_floor": 1.0e-12,
+    "event_branches": {
+        "r1_x": "r1_x", "r1_y": "r1_y", "r1_z": "r1_z",
+        "r2_x": "r2_x", "r2_y": "r2_y", "r2_z": "r2_z",
+        "e1_MeV": "e1_MeV"
+    },
+    "result_branches": {
+        "cell_index": "cell_index", "weight": "weight",
+        "healpix_pixel_id": "healpix_pixel_id",
+        "theta_degree": "theta_degree", "phi_degree": "phi_degree",
+        "direction_x": "direction_x", "direction_y": "direction_y",
+        "direction_z": "direction_z", "energy_MeV": "energy_MeV"
+    },
+    "absolute_efficiency_branches": {
+        "cell_index": "cell_index", "efficiency": "efficiency"
+    }
+}

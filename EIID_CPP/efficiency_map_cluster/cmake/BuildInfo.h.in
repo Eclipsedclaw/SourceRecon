@@ -1,0 +1,3 @@
+#pragma once
+#define EFF_SOURCE_SHA256 "@EFF_SOURCE_SHA256@"
+#define EFF_COMPILER "@EFF_COMPILER@"

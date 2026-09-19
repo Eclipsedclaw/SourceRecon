@@ -1,0 +1,11 @@
+{
+    "input_absolute_efficiency_file": "../../runs/latest/efficiency/absolute_efficiency_master.root",
+    "input_absolute_efficiency_tree": "AbsoluteEfficiency",
+    "output_absolute_efficiency_file": "../../runs/latest/efficiency/absolute_efficiency_nside32.root",
+    "output_absolute_efficiency_tree": "AbsoluteEfficiency",
+    "master_grid": {"healpix_nside": 32, "energy_min_MeV": 0.3, "energy_max_MeV": 2.0, "energy_point_count": 50},
+    "target_grid": {"healpix_nside": 32, "energy_min_MeV": 0.3, "energy_max_MeV": 2.0, "energy_point_count": 50},
+    "interpolation": "polygon",
+    "polygon_subdivision_factor": 1,
+    "require_full_coverage": true
+}

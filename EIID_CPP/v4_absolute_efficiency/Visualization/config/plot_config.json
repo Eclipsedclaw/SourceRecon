@@ -1,0 +1,10 @@
+{
+    "input_root_file": "../../result.root",
+    "input_tree_name": "EiidImage",
+    "output_directory": "../figures/",
+    "truth_info_file": "truth_info.json",
+    "draw_skymap": true,
+    "draw_spectrum": true,
+    "draw_containment": true,
+    "show_truth_markers": true
+}

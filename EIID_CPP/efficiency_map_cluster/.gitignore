@@ -1,0 +1,9 @@
+/build*/
+/.validation_deps/
+/dist/
+/runs/
+/config/environment.sh
+__pycache__/
+*.o
+*.exe
+*.log

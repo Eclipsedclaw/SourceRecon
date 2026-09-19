@@ -1,0 +1,21 @@
+{
+    "input_absolute_efficiency_file": "../../absolute_efficiency_master.root",
+    "input_absolute_efficiency_tree": "Sensitivity",
+    "output_absolute_efficiency_file": "../../absolute_efficiency.root",
+    "output_absolute_efficiency_tree": "Sensitivity",
+    "master_grid": {
+        "healpix_nside": 16,
+        "energy_min_MeV": 0.3,
+        "energy_max_MeV": 2.0,
+        "energy_point_count": 50
+    },
+    "target_grid": {
+        "healpix_nside": 8,
+        "energy_min_MeV": 0.3,
+        "energy_max_MeV": 2.0,
+        "energy_point_count": 50
+    },
+    "interpolation": "polygon",
+    "polygon_subdivision_factor": 1,
+    "require_full_coverage": true
+}

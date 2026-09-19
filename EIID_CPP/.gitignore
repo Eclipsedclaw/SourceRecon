@@ -1,0 +1,112 @@
+# EIID_CPP：只管理源码、可复现配置、构建脚本和文档。
+# 本文件不删除磁盘文件，也不会自动取消已跟踪/已暂存文件。
+
+# 父仓库 SourceRecon/.gitignore 包含 Makefile；在本项目内纠正。
+# build/ 等生成目录仍整体忽略，其中的 CMake 生成 Makefile 不会被放行。
+!Makefile
+!GNUmakefile
+!CMakeLists.txt
+
+# 编译输出及 CMake 工作目录。
+build/
+build-*/
+build_*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+compile_commands.json
+.validation_deps/
+*.o
+*.obj
+*.d
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.pdb
+*.pcm
+*.rootmap
+
+# 无扩展名的程序：使用准确名称，不使用 eiid_* / test_* 等宽泛规则。
+eiid_core
+eiid_core_healpix
+eiid_reconstruction
+eiid_translator
+eiid_plotter
+eiid_reconstruction_1
+eiid_translator_1
+eiid_plotter_1
+EIID_Recon_V3
+EIID_Recon_V4
+EIID_Recon_V5
+EIID_Recon_V6
+EIID_Recon_V7
+EIID_Recon_V8
+EIID_Recon_V9
+EIID_Recon_V10
+grid_resampler
+geant4_simulator
+doppler_experiment
+doppler_compare
+doppler_sample_generator
+response_calibrator
+kernel_benchmark
+efficiency_simulator
+efficiency_merge
+efficiency_preflight
+
+# 测试程序本体；保留旁边的 .cpp、.h 和 JSON 测试用例。
+**/common/tests/test_absolute_efficiency
+**/Geant4_Simulation/tests/test_absolute_efficiency_estimator
+**/Reconstruction/tests/test_efficiency_weighted_mlem
+**/Reconstruction/tests/test_pixel_integrated_response
+**/SimulationSupport/tests/test_calibration_schema
+**/ResponseKernel/tests/test_kernel_interpolation
+**/ResponseKernel/tests/test_kernel_normalization
+**/ResponseKernel/tests/test_gaussian_lorentzian_mixture
+**/PixelIntegration/tests/test_pixel_sampling
+
+# 数据、模拟运行、图片和打包产物。不要忽略整个 config/ 或所有 JSON。
+*.root
+*.root.tmp.*
+runs/
+run/
+output/
+outputs/
+figures/
+logs/
+dist/
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# 本机环境与自动探测路径：模板 .example 保留。
+**/config/environment.sh
+**/config/local.mk
+**/config/local.mk.tmp
+runtime_paths.sh
+.env
+.env.local
+
+# 缓存和编辑器临时文件；源码脚本、文档和 third_party/ 不整体忽略。
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

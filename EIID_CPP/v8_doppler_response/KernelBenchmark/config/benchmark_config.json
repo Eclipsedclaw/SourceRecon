@@ -1,0 +1,19 @@
+{
+    "inputs": [
+        {
+            "label": "Voigt response",
+            "kernel_type": "voigt",
+            "file": "../../result_voigt.root",
+            "tree": "EiidImage"
+        },
+        {
+            "label": "Double-Gaussian response",
+            "kernel_type": "double_gaussian",
+            "file": "../../result_double_gaussian.root",
+            "tree": "EiidImage"
+        }
+    ],
+    "truth_info_file": "../../Visualization/config/truth_info.json",
+    "output_json": "../output/kernel_benchmark.json",
+    "figures_directory": "../figures"
+}

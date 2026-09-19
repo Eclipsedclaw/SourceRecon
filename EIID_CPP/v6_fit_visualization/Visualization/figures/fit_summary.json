@@ -1,0 +1,48 @@
+{
+    "containment": {
+        "R50_degree": 4.173795294611802,
+        "R68_degree": 10.721775568080298,
+        "R90_degree": 34.934039545125984
+    },
+    "direction_fit": {
+        "angular_bias_degree": 0.638876680811269,
+        "ellipse_angle_degree": -55.004446206605095,
+        "fit_converged": false,
+        "fit_status": 3,
+        "healpix_nside": 16,
+        "mean_pixel_scale_degree": 3.6645188392718997,
+        "phi_degree": 180.65006569786667,
+        "sigma_major_degree": 4.110744748320954,
+        "sigma_minor_degree": 3.893093978428434,
+        "theta_degree": 165.61724796907257,
+        "under_resolved": false
+    },
+    "energy_fit": {
+        "bias_MeV": 0.01939329911089205,
+        "direction_gate_radius_degree": 15.0,
+        "fit_converged": false,
+        "fit_max_MeV": 0.8416326530612245,
+        "fit_min_MeV": 0.5216326530612244,
+        "fit_status": 3,
+        "fwhm_MeV": 0.10461213325719787,
+        "mean_MeV": 0.6813932991108921,
+        "relative_fwhm": 0.15352680073857458,
+        "sigma_MeV": 0.0444246826755706
+    },
+    "methods": {
+        "direction": "local_tangent_plane_elliptical_gaussian",
+        "energy": "local_gaussian_plus_constant_background",
+        "uncertainty_note": "MLEM image weights are not independent event counts; fit widths are descriptive."
+    },
+    "schema_version": 1,
+    "truth": {
+        "energy_MeV": 0.662,
+        "phi_degree": 180.0,
+        "theta_degree": 165.0
+    },
+    "warnings": [
+        "Preliminary ROOT energy fit failed; moment fallback was used.",
+        "ROOT direction fit failed; moment fallback was used.",
+        "Final ROOT energy fit failed; moment fallback was used."
+    ]
+}
